@@ -1,0 +1,13 @@
+{
+  "editor.formatOnSave": true,
+
+  "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+  "typescript.format.placeOpenBraceOnNewLineForFunctions": true,
+
+  "[json]": {
+    "editor.formatOnSave": false,
+  },
+  "[jsonc]": {
+    "editor.formatOnSave": false,
+  },
+}
