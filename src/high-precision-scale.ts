@@ -3,7 +3,7 @@
  * This module increases the precision of the ‘scale’ slider in the token configuration dialog.
  */
 
-import { requireElement } from "./require-element.js"
+import { requireElement } from './require-element.js'
 
 /**
  * When rendering the token configuration dialog, make some changes to the controls.

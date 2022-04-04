@@ -4,7 +4,7 @@
  * Such changes are a preview only and will be undone if the dialog is dismissed.
  */
 
-import { expect } from "./expect.js"
+import { expect } from './expect.js'
 
 /**
  * This is a list of keys that are applied in {@link Token.refresh}, which is one of the methods
@@ -65,7 +65,8 @@ namespace Helpers
      */
     function findSheet(token: Token): TokenConfig | undefined
     {
-        for (const key in ui.windows) {
+        for (const key in ui.windows)
+        {
             const sheet = ui.windows[key]
             if (sheet instanceof TokenConfig && sheet.token.id == token.id)
                 return sheet
@@ -90,7 +91,8 @@ namespace Helpers
         const formData = new FormDataExtended(sheet.form, {}).toObject()
 
         // Apply a specific subset of ‘previewable’ properties from that form data:
-        for (const [key, value] of Object.entries(formData)) {
+        for (const [key, value] of Object.entries(formData))
+        {
             if (keysToUpdate.has(key))
                 setProperty(token.data, key, value)
         }
@@ -112,10 +114,12 @@ namespace Helpers
     function augmentedRefresh(this: Token): Token
     {
         const injection = injectTokenData(this, REFRESH_KEYS)
-        try {
+        try
+        {
             return Token.prototype.refresh.call(this)
         }
-        finally {
+        finally
+        {
             injection.undo()
         }
     }
@@ -126,10 +130,12 @@ namespace Helpers
     function augmentedDrawAuras(this: Token): void
     {
         const injection = injectTokenData(this, DRAW_AURA_KEYS)
-        try {
+        try
+        {
             return Token.prototype.drawAuras.call(this)
         }
-        finally {
+        finally
+        {
             injection.undo()
         }
     }
@@ -139,7 +145,8 @@ namespace Helpers
      */
     export function enablePreview(token: Token): void
     {
-        if (!token[isAugmented]) {
+        if (!token[isAugmented])
+        {
             token[isAugmented] = true
             token.refresh = augmentedRefresh
             token.drawAuras = augmentedDrawAuras
@@ -151,7 +158,8 @@ namespace Helpers
      */
     export function disablePreview(token: Token): void
     {
-        if (token[isAugmented]) {
+        if (token[isAugmented])
+        {
             delete token[isAugmented]
             // @ts-expect-error
             delete token.refresh

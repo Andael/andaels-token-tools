@@ -4,7 +4,7 @@
  * used to modify the position of the token image relative to its base.
  */
 
-import { requireElement } from "./require-element.js"
+import { requireElement } from './require-element.js'
 
 /**
  * This method is like `getFlag` but faster. That’s important since this method may be called quite
@@ -60,7 +60,8 @@ Token.prototype.refresh = (function()
         original.apply(this)
 
         const anchor = getAnchorFast(this)
-        if (anchor) {
+        if (anchor)
+        {
             const icon = this.icon!
             const scale = 1 / this.data.scale
             icon.pivot.set(
