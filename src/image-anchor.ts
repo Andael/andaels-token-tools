@@ -13,7 +13,7 @@ import { requireElement } from './require-element.js'
 function getAnchorFast(token: Token | TokenDocument): { x: number; y: number } | undefined
 {
     const flags = token.data.flags
-    return flags.wor?.anchor
+    return flags['andaels-token-tools']?.anchor
 }
 
 /**
@@ -32,14 +32,14 @@ Hooks.on('renderTokenConfig', function(config, html)
          <div class='form-group'>
              <label>X Offset <span class='units'>(Ratio)</span>:</label>
              <div class='form-fields'>
-                 <input type='range' name='flags.wor.anchor.x' value='${anchor.x}' min='0' max='1' step='0.01' data-dtype='Number'>
+                 <input type='range' name='flags.andaels-token-tools.anchor.x' value='${anchor.x}' min='0' max='1' step='0.01' data-dtype='Number'>
                  <span class='range-value'>${anchor.x}</span>
              </div>
          </div>
          <div class='form-group'>
              <label>Y Offset <span class='units'>(Ratio)</span>:</label>
              <div class='form-fields'>
-                 <input type='range' name='flags.wor.anchor.y' value='${anchor.y}' min='0' max='1' step='0.01' data-dtype='Number'>
+                 <input type='range' name='flags.andaels-token-tools.anchor.y' value='${anchor.y}' min='0' max='1' step='0.01' data-dtype='Number'>
                  <span class='range-value'>${anchor.y}</span>
              </div>
          </div>`)

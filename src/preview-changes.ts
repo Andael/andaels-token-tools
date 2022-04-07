@@ -14,8 +14,8 @@ const REFRESH_KEYS = new Set([
     'alpha',
     'displayBars',
     'displayName',
-    'flags.wor.anchor.x',
-    'flags.wor.anchor.y',
+    'flags.andaels-token-tools.anchor.x',
+    'flags.andaels-token-tools.anchor.y',
     'mirrorX',
     'mirrorY',
     'scale'
