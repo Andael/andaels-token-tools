@@ -4,7 +4,7 @@
  * Such changes are a preview only and will be undone if the dialog is dismissed.
  */
 
-import { expect } from './expect.js'
+import log from './log.js'
 
 /**
  * This is a list of keys that are applied in {@link Token.refresh}, which is one of the methods
@@ -58,20 +58,8 @@ declare global
 
 namespace Helpers
 {
-    /**
-     * Depending on how you open the token configuration dialog, it may not be linked via the
-     * `token.sheet` property. This method, instead, searches all open windows to find the correct
-     * dialog.
-     */
-    function findSheet(token: Token): TokenConfig | undefined
-    {
-        for (const key in ui.windows)
-        {
-            const sheet = ui.windows[key]
-            if (sheet instanceof TokenConfig && sheet.token.id == token.id)
-                return sheet
-        }
-        return undefined
+    const NO_OP = {
+        undo() { }
     }
 
     /**
@@ -86,8 +74,10 @@ namespace Helpers
         const realData = duplicate(token.data)
 
         // Get the form data from the open dialog:
-        const sheet = findSheet(token)
-        expect(sheet?.form instanceof HTMLFormElement)
+        const sheet = getSheetSafe(token)
+        if (!sheet)
+            return NO_OP
+
         const formData = new FormDataExtended(sheet.form, {}).toObject()
 
         // Apply a specific subset of ‘previewable’ properties from that form data:
@@ -161,9 +151,9 @@ namespace Helpers
         if (token[isAugmented])
         {
             delete token[isAugmented]
-            // @ts-expect-error
+            // @ts-expect-error: reverts to the inherited method
             delete token.refresh
-            // @ts-expect-error
+            // @ts-expect-error: reverts to the inherited method
             delete token.drawAuras
         }
     }
@@ -175,29 +165,30 @@ namespace Helpers
  */
 Hooks.on('renderTokenConfig', function(config, html)
 {
-    const token = getTokenFromConfig(config)
+    const token = getTokenSafe(config)
 
     // If this dialog is for a prototype token, do nothing:
-    if (!token?.icon)
+    if (!token)
         return
 
     // Enable real-time previews for this token:
     Helpers.enablePreview(token)
 
     // Whenever this dialog is updated, update the real-time preview as well:
-    html.on('input', function(evt)
+    html.on('input', function(evt): void
     {
-        const input = evt.target
-        expect(input instanceof HTMLInputElement || input instanceof HTMLSelectElement)
+        const field = evt.target
+        if (!(field instanceof HTMLInputElement || field instanceof HTMLSelectElement))
+            return log.unexpected(evt, 'target')
 
-        if (REFRESH_KEYS.has(input.name))
+        if (REFRESH_KEYS.has(field.name))
             token.refresh()
 
-        if (DRAW_AURA_KEYS.has(input.name))
+        if (DRAW_AURA_KEYS.has(field.name))
             token.drawAuras()
 
-        if (input.name == 'tint')
-            setTint(token, input.value)
+        if (field.name == 'tint')
+            setTint(token, field.value)
     })
 })
 
@@ -206,10 +197,10 @@ Hooks.on('renderTokenConfig', function(config, html)
  */
 Hooks.on('closeTokenConfig', function(config)
 {
-    const token = getTokenFromConfig(config)
+    const token = getTokenSafe(config)
 
     // If this dialog is for a prototype token, do nothing:
-    if (!token?.icon)
+    if (!token)
         return
 
     // Disable real-time previews for this token:
@@ -222,31 +213,66 @@ Hooks.on('closeTokenConfig', function(config)
 })
 
 /**
- * This method gets the `Token` object associated with a given token configuration dialog.
+ * This method gets the {@link Token} object associated with a given token
+ * configuration dialog.
  *
- * Note that the type definitions are wrong — `config.token` is a `TokenDocument` instance, not a
- * `Token` instance.
- *
- * When viewing the dialog for a prototype token, this method will return `undefined`.
+ * This method returns `null` when viewing the dialog for a prototype token or
+ * a token that does not belong to the active scene.
  */
-function getTokenFromConfig(config: TokenConfig): Token | undefined
+function getTokenSafe(sheet: TokenConfig): Token | undefined
 {
-    return (config.token as any)._object
+    if (sheet.token instanceof PrototypeTokenDocument)
+        return undefined
+
+    if (!sheet.token)
+        return log.unexpected(sheet, 'token')
+
+    const token = sheet.token['_object']
+    if (!token)
+        return log.unexpected(sheet.token, '_object')
+
+    // @ts-expect-error: type definition issue
+    return token
 }
 
 /**
- * Applies a new tint color to a token without actually updating the token’s data.
+ * This method gets the token configuration dialog for a given token.
+ *
+ * This method returns `null` if there is no open dialog for the specified
+ * token, it is not a {@link TokenConfig} instance, or it does not have a
+ * `<form/>` element.
+ */
+function getSheetSafe(token: Token): (TokenConfig & HasForm) | undefined
+{
+    const sheet = token.document['_sheet']
+    if (!(sheet instanceof TokenConfig))
+        return log.unexpected(token.document, '_sheet')
+
+    if (!hasForm(sheet))
+        return log.unexpected(sheet, 'form')
+
+    return sheet
+}
+
+/**
+ * Applies a new tint color to a token without actually updating the token’s
+ * data.
  */
 function setTint(token: Token, newColor: string | null | undefined): void
 {
-    expect(token.icon)
+    if (!token.icon)
+        return log.unexpected(token, 'icon')
 
     type Arg = Parameters<typeof foundry.utils.colorStringToHex>[0]
-
-    // Note that the type definitions are wrong — colorStringToHex works fine when given null or
-    // undefined…
-    // @ts-expect-error
+    // @ts-expect-error: type definition issue
     const arg: Arg = newColor
 
     token.icon.tint = foundry.utils.colorStringToHex(arg) ?? 0xffffff
+}
+
+type HasForm = { form: HTMLFormElement }
+
+function hasForm(sheet: { form: HTMLElement | null }): sheet is HasForm
+{
+    return !!sheet.form
 }
