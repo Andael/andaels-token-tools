@@ -1,0 +1,19 @@
+{
+  "name": "andaels-token-tools",
+  "minimumCoreVersion": "10.285",
+  "compatibleCoreVersion": "10.285",
+
+  "esmodules": [
+    "src/main.js"
+  ],
+
+  "title": "Andael’s Token Tools",
+  "description": "A new module.",
+  "authors": [{
+    "name": "Andael",
+    "url": "https://github.com/Andael"
+  }],
+  "url": "https://github.com/Andael/andaels-token-tools",
+
+  "version": "develop"
+}
