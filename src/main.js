@@ -1,8 +1,8 @@
 import log from './utils/log.js'
-import * as moreInteractiveFields from './aspects/more-interactive-fields.js'
+import * as instantTokenPreview from './aspects/instant-token-preview.js'
 
 Hooks.on('ready', function()
 {
-    moreInteractiveFields.activate()
+    instantTokenPreview.activate()
     log('Ready')
 })
