@@ -5,12 +5,13 @@
  * makes it so that the preview updates immediately.
  */
 
-export function activate()
+/**
+ * Enables instant token preview for a TokenConfig dialog.
+ * @param {TokenConfig} app Which dialog to enable it for.
+ */
+export function enableFor(app)
 {
-    Hooks.on('renderTokenConfig', function(_, form)
-    {
-        form.on('input', onFormInput)
-    })
+    app.element.on('input', onFormInput)
 }
 
 /**
