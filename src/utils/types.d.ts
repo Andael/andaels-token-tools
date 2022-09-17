@@ -8,7 +8,7 @@ declare const Hooks: {
     on<K extends keyof Hooks>(name: K, fn: Hooks[K]): void
 }
 
-interface JQuery extends ArrayLike<HTMLElement> {
+interface JQuery {
     after(newHtml: string): unknown
     closest(selector: string): JQuery
     find(selector: string): JQuery

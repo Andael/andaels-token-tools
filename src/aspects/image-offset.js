@@ -11,13 +11,13 @@
 export function addFieldsTo(app)
 {
     // Find the ‘scale’ slider, since we’ll be adding the offset fields underneath that:
-    const scaleSlider = app.element.find('[name=scale]')[0]
+    const scaleSlider = app.element.find('[name=scale]')
 
     // Get the current value of the offset fields:
     const offset = { x: 0.5, y: 0.5, ...getOffset(app.token) }
 
     // Add the offset fields:
-    $(scaleSlider).closest('.form-group').after(`
+    scaleSlider.closest('.form-group').after(`
         <div class='form-group'>
             <label>X Offset <span class='units'>(Ratio)</span></label>
             <div class='form-fields'>
