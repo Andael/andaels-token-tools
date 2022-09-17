@@ -12,6 +12,7 @@ interface JQuery {
     after(newHtml: string): unknown
     closest(selector: string): JQuery
     find(selector: string): JQuery
+    off: JQuery['on']
     on<K extends keyof HTMLElementEventMap>(
         eventName: K,
         listener: (this: unknown, ev: HTMLElementEventMap[K]) => any): this;
