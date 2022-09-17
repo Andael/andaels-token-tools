@@ -1,5 +1,6 @@
 interface Hooks {
     ready(): void
+    refreshToken(token: Token, options: unknown): void
     renderTokenConfig(app: TokenConfig, html: JQuery, options: unknown): void
 }
 
@@ -8,6 +9,9 @@ declare const Hooks: {
 }
 
 interface JQuery {
+    after(newHtml: string): unknown
+    closest(selector: string): JQuery
+    find(selector: string): JQuery
     on<K extends keyof HTMLElementEventMap>(
         eventName: K,
         listener: (this: unknown, ev: HTMLElementEventMap[K]) => any): this;
@@ -24,6 +28,32 @@ declare namespace foundry.data.validators {
     export function isColorString(str: string): boolean
 }
 
+interface Token {
+    mesh: TokenMesh
+    document: TokenDocument
+}
+
 interface TokenConfig {
     element: JQuery
+    token: TokenDocument
+    setPosition(): void
+}
+
+interface TokenDocument {
+    flags: {
+        'andaels-token-tools'?: {
+            offset?: { x?: number, y?: number }
+        }
+    }
+    texture: { scaleX: number, scaleY: number }
+}
+
+declare class TokenMesh {
+    pivot: {
+        set(x: number, y: number): void
+    }
+    texture: {
+        width: number
+        height: number
+    }
 }
