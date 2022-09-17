@@ -2,15 +2,15 @@ import log from './utils/log.js'
 import * as imageOffset from './aspects/image-offset.js'
 import * as instantTokenPreview from './aspects/instant-token-preview.js'
 
-Hooks.on('renderTokenConfig', function(app, html)
+Hooks.on('renderTokenConfig', function(app)
 {
-    imageOffset.renderTokenConfig(app, html)
+    imageOffset.addFieldsTo(app)
     instantTokenPreview.enableFor(app)
 })
 
 Hooks.on('refreshToken', function(token)
 {
-    imageOffset.refreshToken(token)
+    imageOffset.refreshPivot(token)
 })
 
 Hooks.on('ready', function()

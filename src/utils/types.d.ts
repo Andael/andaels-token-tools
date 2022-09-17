@@ -9,16 +9,15 @@ declare const Hooks: {
 }
 
 interface JQuery extends ArrayLike<HTMLElement> {
+    after(newHtml: string): unknown
+    closest(selector: string): JQuery
+    find(selector: string): JQuery
     on<K extends keyof HTMLElementEventMap>(
         eventName: K,
         listener: (this: unknown, ev: HTMLElementEventMap[K]) => any): this;
     siblings(selector: string): JQuery
     trigger<K extends keyof HTMLElementEventMap>(eventName: K): this
     val(value: string): this
-
-    find(selector: string): JQuery
-    closest(selector: string): JQuery
-    after(newHtml: string): unknown
 }
 
 declare const $: {
@@ -43,7 +42,7 @@ interface TokenConfig {
 interface TokenDocument {
     flags: {
         'andaels-token-tools'?: {
-            anchor?: { x?: number, y?: number }
+            offset?: { x?: number, y?: number }
         }
     }
     texture: { scaleX: number, scaleY: number }
