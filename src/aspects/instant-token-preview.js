@@ -5,12 +5,12 @@
  * makes it so that the preview updates immediately.
  */
 
-export function activate()
+/**
+ * @param {JQuery} html
+ */
+export function renderTokenConfig(html)
 {
-    Hooks.on('renderTokenConfig', function(_, form)
-    {
-        form.on('input', onFormInput)
-    })
+    html.on('input', onFormInput)
 }
 
 /**
