@@ -5,7 +5,7 @@ import * as instantTokenPreview from './aspects/instant-token-preview.js'
 Hooks.on('renderTokenConfig', function(app, html)
 {
     imageOffset.renderTokenConfig(app, html)
-    instantTokenPreview.renderTokenConfig(html)
+    instantTokenPreview.enable(html)
 })
 
 Hooks.on('refreshToken', function(token)

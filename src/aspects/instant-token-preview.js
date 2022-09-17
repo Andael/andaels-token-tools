@@ -6,9 +6,10 @@
  */
 
 /**
- * @param {JQuery} html
+ * Enables instant token preview for a TokenConfig dialog.
+ * @param {JQuery} html The dialog’s root element.
  */
-export function renderTokenConfig(html)
+export function enable(html)
 {
     html.on('input', onFormInput)
 }
