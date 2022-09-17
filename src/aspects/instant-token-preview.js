@@ -7,11 +7,11 @@
 
 /**
  * Enables instant token preview for a TokenConfig dialog.
- * @param {JQuery} html The dialog’s root element.
+ * @param {TokenConfig} app Which dialog to enable it for.
  */
-export function enable(html)
+export function enableFor(app)
 {
-    html.on('input', onFormInput)
+    app.element.on('input', onFormInput)
 }
 
 /**

@@ -1,6 +1,6 @@
 interface Hooks {
     ready(): void
-    renderTokenConfig(app: unknown, html: JQuery, options: unknown): void
+    renderTokenConfig(app: TokenConfig, html: JQuery, options: unknown): void
 }
 
 declare const Hooks: {
@@ -22,4 +22,8 @@ declare const $: {
 
 declare namespace foundry.data.validators {
     export function isColorString(str: string): boolean
+}
+
+interface TokenConfig {
+    element: JQuery
 }
