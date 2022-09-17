@@ -4,16 +4,12 @@
  * used to modify the position of the token image relative to its base.
  */
 
+/**
+ * @param {TokenDocument} token
+ */
 function getAnchorFast(token)
 {
-    const flags = token.flags
-    const anchor = flags['andaels-token-tools']?.anchor
-    if (anchor)
-    {
-        anchor.x ??= 0.5
-        anchor.y ??= 0.5
-    }
-    return anchor
+    return token.flags['andaels-token-tools']?.anchor
 }
 
 export function activate()
@@ -24,7 +20,7 @@ export function activate()
         const scaleSlider = html.find('[name=scale]')[0]
 
         // Get the current value of the offset fields:
-        const anchor = getAnchorFast(config.token) ?? { x: 0.5, y: 0.5 }
+        const anchor = { x: 0.5, y: 0.5, ...getAnchorFast(config.token) }
 
         // Add the offset fields:
         $(scaleSlider).closest('.form-group').after(`
@@ -48,28 +44,17 @@ export function activate()
     })
 }
 
-
-Token.prototype.refresh = (function()
+Hooks.on('refreshToken', function(token)
 {
-    const original = Token.prototype.refresh
-
-    return function()
+    const anchor = getAnchorFast(token.document)
+    if (anchor)
     {
-        original.apply(this)
+        const { width, height } = token.mesh.texture
+        const { scaleX, scaleY } = token.document.texture
 
-        const anchor = getAnchorFast(this.document)
-        if (anchor)
-        {
-            const icon = this.mesh
-            // const scale = 1 / this.data.scale
-            const { scaleX, scaleY } = this.document.texture
-
-            icon.pivot.set(
-                icon.texture.width * (0.5 - anchor.x) / scaleX,
-                icon.texture.height * (0.5 - anchor.y) / scaleY
-            )
-        }
-
-        return this
+        token.mesh.pivot.set(
+            width * (0.5 - (anchor.x ?? 0.5)) / scaleX,
+            height * (0.5 - (anchor.y ?? 0.5)) / scaleY
+        )
     }
-})()
+})
