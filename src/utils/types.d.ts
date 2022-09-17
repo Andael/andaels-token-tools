@@ -35,6 +35,7 @@ interface Token {
 }
 
 interface TokenConfig {
+    element: JQuery
     token: TokenDocument
     setPosition(): void
 }
