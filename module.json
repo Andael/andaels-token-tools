@@ -1,7 +1,9 @@
 {
   "name": "andaels-token-tools",
-  "minimumCoreVersion": "10.285",
-  "compatibleCoreVersion": "10.285",
+  "compatibility": {
+    "minimum": "10.285",
+    "verified": "10.285"
+  },
 
   "esmodules": [
     "src/main.js"
