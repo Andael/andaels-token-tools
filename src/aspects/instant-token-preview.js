@@ -11,6 +11,7 @@
  */
 export function enableFor(app)
 {
+    app.element.off('input', onFormInput)
     app.element.on('input', onFormInput)
 }
 
