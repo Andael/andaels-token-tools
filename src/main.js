@@ -6,6 +6,7 @@ Hooks.on('renderTokenConfig', function(app)
 {
     imageOffset.addFieldsTo(app)
     instantTokenPreview.enableFor(app)
+    log(`Updated dialog ‘${app.title}’`)
 })
 
 Hooks.on('refreshToken', function(token)

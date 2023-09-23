@@ -4,6 +4,8 @@
  * used to modify the position of the token image relative to its base.
  */
 
+import log from '../utils/log.js'
+
 /**
  * Adds x/y offset (as sliders) to a TokenConfig dialog.
  * @param {TokenConfig} app Which dialog to add the sliders to.
@@ -11,13 +13,15 @@
 export function addFieldsTo(app)
 {
     // Find the ‘scale’ slider, since we’ll be adding the offset fields underneath that:
-    const scaleSlider = app.element.find('[name=scale]')
+    const scaleField = app.element.find('[name=scale]').closest('.form-group')
+    if (scaleField.length == 0)
+        return log.error('‘scale’ field could not be found')
 
     // Get the current value of the offset fields:
     const offset = { x: 0.5, y: 0.5, ...getOffset(app.token) }
 
     // Add the offset fields:
-    scaleSlider.closest('.form-group').after(`
+    scaleField.after(`
         <div class='form-group'>
             <label>X Offset <span class='units'>(Ratio)</span></label>
             <div class='form-fields'>

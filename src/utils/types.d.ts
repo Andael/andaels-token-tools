@@ -8,15 +8,16 @@ declare const Hooks: {
     on<K extends keyof Hooks>(name: K, fn: Hooks[K]): void
 }
 
-interface JQuery {
+interface JQuery extends ArrayLike<HTMLElement> {
     after(newHtml: string): unknown
     closest(selector: string): JQuery
     find(selector: string): JQuery
     off: JQuery['on']
     on<K extends keyof HTMLElementEventMap>(
         eventName: K,
-        listener: (this: unknown, ev: HTMLElementEventMap[K]) => any): this;
+        listener: (this: unknown, ev: HTMLElementEventMap[K]) => any): this
     siblings(selector: string): JQuery
+    text(fn: (i: number, str: string) => string): this
     trigger<K extends keyof HTMLElementEventMap>(eventName: K): this
     val(value: string): this
 }
@@ -36,6 +37,7 @@ interface Token {
 
 interface TokenConfig {
     element: JQuery
+    title: string
     token: TokenDocument
     setPosition(): void
 }
@@ -57,4 +59,17 @@ declare class TokenMesh {
         width: number
         height: number
     }
+}
+
+interface NotifyOptions {
+    permanent?: boolean
+    localize?: boolean
+    console?: boolean
+}
+
+type NotifyFunction = (message: string, options?: NotifyOptions) => number
+
+declare namespace ui.notifications {
+    const error: NotifyFunction
+    const warn: NotifyFunction
 }
