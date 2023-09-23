@@ -16,17 +16,5 @@ Hooks.on('refreshToken', function(token)
 Hooks.on('ready', function()
 {
     log('Ready')
+    imageOffset.patchResetPreview()
 })
-
-TokenConfig.prototype._resetPreview = (function()
-{
-    const original = TokenConfig.prototype._resetPreview
-
-    return function()
-    {
-        if (!hasProperty(this.original, 'flags.andaels-token-tools.offset'))
-            this._previewChanges({ 'flags.andaels-token-tools.-=offset': true })
-
-        original.call(this)
-    }
-})()

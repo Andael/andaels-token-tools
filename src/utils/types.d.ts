@@ -34,10 +34,13 @@ interface Token {
     document: TokenDocument
 }
 
-interface TokenConfig {
+declare class TokenConfig {
+    _previewChanges(a: object): void
+    _resetPreview(): void
     element: JQuery
-    token: TokenDocument
+    original: TokenDocument
     setPosition(): void
+    token: TokenDocument
 }
 
 interface TokenDocument {
@@ -58,3 +61,5 @@ declare class TokenMesh {
         height: number
     }
 }
+
+declare function hasProperty<T>(obj: T, deepKey: string): boolean

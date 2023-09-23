@@ -4,6 +4,8 @@
  * used to modify the position of the token image relative to its base.
  */
 
+import log from '../utils/log.js'
+
 /**
  * Adds x/y offset (as sliders) to a TokenConfig dialog.
  * @param {TokenConfig} app Which dialog to add the sliders to.
@@ -55,6 +57,26 @@ export function refreshPivot(token)
             height * (0.5 - (offset.y ?? 0.5)) / scaleY
         )
     }
+}
+
+/**
+ * TODO
+ */
+export function patchResetPreview()
+{
+    TokenConfig.prototype._resetPreview = (function()
+    {
+        const original = TokenConfig.prototype._resetPreview
+
+        /** @this {TokenConfig} */
+        return function()
+        {
+            if (!hasProperty(this.original, 'flags.andaels-token-tools.offset'))
+                this._previewChanges({ 'flags.andaels-token-tools.-=offset': true }) // set it to 0.5 instead
+
+            original.call(this)
+        }
+    })()
 }
 
 /**
