@@ -5,6 +5,7 @@
   "javascript.format.placeOpenBraceOnNewLineForControlBlocks": true,
   "javascript.format.placeOpenBraceOnNewLineForFunctions": true,
   "javascript.format.semicolons": "remove",
+  "javascript.preferences.importModuleSpecifierEnding": "js",
   "javascript.preferences.quoteStyle": "single",
 
   "[json]": {
