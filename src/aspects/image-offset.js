@@ -37,6 +37,12 @@ export function addFieldsTo(app)
             </div>
         </div>`)
 
+    // Update the header (if there is one):
+    scaleField.closest('fieldset').find('legend').text(function(_, str)
+    {
+        return str == 'Size' ? 'Size / Offset' : ''
+    })
+
     // Resize the dialog:
     app.setPosition()
 }
